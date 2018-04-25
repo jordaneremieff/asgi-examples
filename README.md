@@ -1,6 +1,6 @@
 # asgi-examples
 
-A collection of examples to demonstrate the composability of [ASGI] applications and to test the compatability of [asgitools].
+A collection of examples to demonstrate the composability of [ASGI] applications and to test the compatibility of [asgitools].
 
 Supports both ASGI servers, [uvicorn] and [daphne].
 
