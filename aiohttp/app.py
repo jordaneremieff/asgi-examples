@@ -3,28 +3,14 @@ from aiohttp.http import RawRequestMessage
 from yarl import URL
 
 
-class AioHttpToAsgiAdapter:
+class HttpConsumer:
 
-    def __init__(self, webapp):
+    def __init__(self, scope, webapp=None, request=None):
+        self.scope = scope
         self.webapp = webapp
+        self.request = request
 
-    def __call__(self, scope):
-        aio_message = RawRequestMessage(
-            method=scope['method'],
-            path=scope['path'],
-            version=scope['http_version'],
-            headers=dict(scope['headers']),
-            raw_headers=dict(scope['headers']),
-            should_close=False,
-            compression=False,
-            upgrade=False,
-            chunked=False,
-            url=URL(scope['path'])
-        )
-        self.request = self.webapp._make_request(aio_message, None, 'http', None, None)
-        return self.asgi_instance
-
-    async def asgi_instance(self, receive, send):
+    async def __call__(self, receive, send):
         response = await self.webapp._handle(self.request)
         body = response.body
         if not isinstance(body, bytes):
@@ -45,10 +31,33 @@ class AioHttpToAsgiAdapter:
         })
 
 
+class AioHttpToAsgiAdapter:
+
+    def __init__(self, webapp):
+        self.webapp = webapp
+
+    def __call__(self, scope):
+        aio_message = RawRequestMessage(
+            method=scope['method'],
+            path=scope['path'],
+            version=scope['http_version'],
+            headers=dict(scope['headers']),
+            raw_headers=dict(scope['headers']),
+            should_close=False,
+            compression=False,
+            upgrade=False,
+            chunked=False,
+            url=URL(scope['path'])
+        )
+        request = self.webapp._make_request(aio_message, None, 'http', None, None)
+        return HttpConsumer(scope, webapp=self.webapp, request=request)
+
+
 async def handle(request):
     name = request.match_info.get('name', "Anonymous")
     text = "Hello, " + name
     return web.Response(text=text)
+
 
 webapp = web.Application()
 webapp.add_routes([web.get('/', handle),
@@ -71,5 +80,3 @@ app = AioHttpToAsgiAdapter(webapp)
 #             break
 
 #     return ws
-
-# web.get('/echo', wshandle),
