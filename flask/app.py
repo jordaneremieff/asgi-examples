@@ -50,7 +50,7 @@ class WebSocketConsumer:
                 return
 
 
-class AsgiAdapter:
+class FlaskWsgiToAsgiAdapter:
 
     def __init__(self, wsgi, *args, **kwargs):
         self.wsgi = wsgi
@@ -122,7 +122,7 @@ class AsgiAdapter:
         return _route
 
 
-app = AsgiAdapter(Flask(__name__))
+app = FlaskWsgiToAsgiAdapter(Flask(__name__))
 
 
 @app.route("/")

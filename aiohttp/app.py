@@ -3,7 +3,7 @@ from aiohttp.http import RawRequestMessage
 from yarl import URL
 
 
-class AsgiAdapter:
+class AioHttpToAsgiAdapter:
 
     def __init__(self, webapp):
         self.webapp = webapp
@@ -54,7 +54,7 @@ webapp = web.Application()
 webapp.add_routes([web.get('/', handle),
                    web.get('/{name}', handle)])
 
-app = AsgiAdapter(webapp)
+app = AioHttpToAsgiAdapter(webapp)
 
 # TODO: Websocket
 
