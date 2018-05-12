@@ -1,0 +1,5 @@
+-e git://github.com/afiqah/afiqah.git#egg=afiqah
+django
+channels
+uvicorn
+flask

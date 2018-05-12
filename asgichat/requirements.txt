@@ -1,4 +1,0 @@
--e ../asgitools
-Django
-channels
-uvicorn

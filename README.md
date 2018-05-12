@@ -1,16 +1,36 @@
 # asgi-examples
 
-A collection of examples to demonstrate the composability of [ASGI] applications and to test the compatibility of [asgitools].
+A collection of examples to test and demonstrate the composability of ASGI applications.
 
-Supports both ASGI servers, [uvicorn] and [daphne].
+## Running
 
-## asgichat
+You will need to use either [uvicorn] or [daphne] to run the ASGI server. 
 
-- A chat app example using Django [Channels] with custom ASGI protocol and routing components.
+```shell
+$ uvicorn <file>:<appname>
+```
+
+```shell
+$ daphne <file>:<appname>
+```
+
+## Examples
+
+### Django
+
+A simple Django [Channels] websocket consumer.
+
+### Flask
+
+An example integrating ASGI consumers in a [Flask] app.
+
+### Afiqah
+
+An example of a pure ASGI app using the [Afiqah] microframework.
 
 
 [Channels]: https://github.com/django/channels/
-[asgitools]: https://github.com/erm/asgitools
-[ASGI]: https://github.com/django/asgiref/blob/master/specs/asgi.rst
-[uvicorn]: https://github.com/encode/uvicorn
-[daphne]: https://github.com/django/daphne
+[Afiqah]: https://github.com/afiqah/afiqah/
+[uvicorn]: https://github.com/encode/uvicorn/
+[daphne]: https://github.com/django/daphne/
+[Flask]: https://github.com/pallets/flask/
