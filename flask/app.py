@@ -62,11 +62,11 @@ class FlaskWsgiToAsgiAdapter:
 
     def __call__(self, scope):
         environ = {
-            'REQUEST_METHOD': scope['method'],
+            'REQUEST_METHOD': scope.get('method', 'GET'),
             'SCRIPT_NAME': scope.get('root_path', ''),
             'PATH_INFO': scope['path'],
             'QUERY_STRING': scope['query_string'].decode('latin-1'),
-            'SERVER_PROTOCOL': 'http/%s' % scope['http_version'],
+            'SERVER_PROTOCOL': 'http/%s' % scope.get('http_version', '1.1'),
             'wsgi.url_scheme': scope.get('scheme', 'http'),
         }
         if scope.get('client'):
@@ -115,7 +115,10 @@ class FlaskWsgiToAsgiAdapter:
         return HttpConsumer(scope, body=body, status=status, headers=headers)
 
     def asgi(self, rule, *args, **kwargs):
-        protocol = kwargs.pop('protocol')
+        try:
+            protocol = kwargs['protocol']
+        except KeyError:
+            raise Exception("You must defined a protocol type for an ASGI handler")
 
         def _route(func):
             self.protocol_router[protocol][rule] = func
