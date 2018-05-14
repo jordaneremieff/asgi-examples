@@ -62,17 +62,8 @@ class FlaskAsgiAdapter:
     def __init__(self, wsgi):
         self.wsgi = wsgi
         self.route = wsgi.route
-        self.protocol_router = {"http": {}, "websocket": {}}
 
     def __call__(self, scope):
-        protocol = scope["type"]
-        path = scope["path"]
-        try:
-            consumer = self.protocol_router[protocol][path]
-        except KeyError:
-            consumer = None
-        if consumer is not None:
-            return consumer(scope)
         environ = {
             "REQUEST_METHOD": scope.get("method", "GET"),
             "SCRIPT_NAME": scope.get("root_path", ""),
@@ -120,17 +111,6 @@ class FlaskAsgiAdapter:
             await send({"type": "http.response.body", "body": body, "more_body": False})
 
         return asgi_instance
-
-    def asgi(self, rule, *args, **kwargs):
-        try:
-            protocol = kwargs["protocol"]
-        except KeyError:
-            raise Exception("You must define a protocol type for an ASGI handler")
-
-        def _route(func):
-            self.protocol_router[protocol][rule] = func
-
-        return _route
 
 
 async def aiohttp_handler(request):
