@@ -1,6 +1,8 @@
 # asgi-examples
 
-A collection of examples to test and demonstrate the composability of ASGI applications.
+This repository exists to provide proof-of-concept implementations of the ASGI specification in an attempt to help encourage its adoption by the maintainers and developers of existing projects. The example adapters are not robust, complete solutions for integrating ASGI into an existing Python framework - they are intended to be simple demonstrations based on my personal understanding of ASGI at this point.
+
+Please open an issue if you would like to see a specific framework example.
 
 ## Running
 

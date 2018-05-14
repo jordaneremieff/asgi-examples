@@ -1,35 +1,118 @@
 from flask import Flask, render_template
 
 
-class HttpConsumer:
+class FlaskAsgiAdapter:
 
-    def __init__(self, scope, body=b'', status=200, headers=[[b'content-type', b'text/plain']]):
-        self.scope = scope
-        if not isinstance(body, bytes):
-            body = body.encode()
-        self.body = body
-        self.status = status
-        self.headers = headers
+    def __init__(self, wsgi):
+        self.wsgi = wsgi
+        self.route = wsgi.route
+        self.protocol_router = {
+            'http': {},
+            'websocket': {},
+        }
 
-    async def __call__(self, receive, send):
-        await send({
-            'type': 'http.response.start',
-            'status': self.status,
-            'headers': self.headers,
-        })
-        await send({
-            'type': 'http.response.body',
-            'body': self.body,
-            'more_body': False,
-        })
+    def __call__(self, scope):
+        protocol = scope['type']
+        path = scope['path']
+        try:
+            consumer = self.protocol_router[protocol][path]
+        except KeyError:
+            consumer = None
+        if consumer is not None:
+            return consumer(scope)
+        environ = {
+            'REQUEST_METHOD': scope.get('method', 'GET'),
+            'SCRIPT_NAME': scope.get('root_path', ''),
+            'PATH_INFO': scope['path'],
+            'QUERY_STRING': scope['query_string'].decode('latin-1'),
+            'SERVER_PROTOCOL': 'http/%s' % scope.get('http_version', '0.0'),
+            'wsgi.url_scheme': scope.get('scheme', 'http'),
+        }
+        if 'server' in scope:
+            environ['SERVER_NAME'] = scope['server'][0]
+            environ['SERVER_PORT'] = str(scope['server'][1])
+        else:
+            environ['REMOTE_ADDR'] = scope['client'][0]
+            environ['REMOTE_PORT'] = str(scope['client'][1])
+        headers = dict(scope['headers'])
+        if b'content-type' in headers:
+            environ['CONTENT_TYPE'] = headers.pop(b'content-type')
+        if b'content-length' in headers:
+            environ['CONTENT_LENGTH'] = headers.pop(b'content-length')
+        for key, val in headers.items():
+            key_str = 'HTTP_%s' % key.decode('latin-1').replace('-', '_').upper()
+            val_str = val.decode('latin-1')
+            environ[key_str] = val_str
+
+        wsgi_status = None
+        wsgi_headers = None
+
+        def start_response(status, headers, exc_info=None):
+            nonlocal wsgi_status, wsgi_headers
+            wsgi_status = status
+            wsgi_headers = headers
+
+        response = self.wsgi(environ, start_response)
+
+        status = int(wsgi_status.split()[0])
+        headers = [[k.lower().encode('latin-1'), v.encode('latin-1')]
+                   for k, v in wsgi_headers]
+        body = b''.join(response)
+
+        async def asgi_instance(receive, send):
+            await send({
+                'type': 'http.response.start',
+                'status': status,
+                'headers': headers,
+            })
+            await send({
+                'type': 'http.response.body',
+                'body': body,
+                'more_body': False,
+            })
+
+        return asgi_instance
+
+    def asgi(self, rule, *args, **kwargs):
+        try:
+            protocol = kwargs['protocol']
+        except KeyError:
+            raise Exception("You must define a protocol type for an ASGI handler")
+
+        def _route(func):
+            self.protocol_router[protocol][rule] = func
+        return _route
 
 
-class WebSocketConsumer:
+app = FlaskAsgiAdapter(Flask(__name__))
 
-    def __init__(self, scope):
-        self.scope = scope
 
-    async def __call__(self, receive, send):
+@app.route("/")
+def hello():
+    return render_template('hello.html')
+
+
+@app.asgi("/asgi", protocol="http")
+def hello_http(scope):
+    async def asgi_instance(receive, send):
+        message = await receive()
+        if message['type'] == 'http.request':
+            await send({
+                'type': 'http.response.start',
+                'status': 200,
+                'headers': [[b'content-type', b'text/plain']],
+            })
+            await send({
+                'type': 'http.response.body',
+                'body': b'Hello http.',
+                'more_body': False,
+            })
+    return asgi_instance
+
+
+@app.asgi("/ws", protocol="websocket")
+def hello_websocket(scope):
+    async def asgi_instance(receive, send):
         while True:
             message = await receive()
             if message['type'] == 'websocket.connect':
@@ -48,96 +131,4 @@ class WebSocketConsumer:
                 await send(response)
             if message['type'] == 'websocket.disconnect':
                 return
-
-
-class FlaskWsgiToAsgiAdapter:
-
-    def __init__(self, wsgi, *args, **kwargs):
-        self.wsgi = wsgi
-        self.route = wsgi.route
-        self.protocol_router = {
-            'http': {},
-            'websocket': {},
-        }
-
-    def __call__(self, scope):
-        environ = {
-            'REQUEST_METHOD': scope.get('method', 'GET'),
-            'SCRIPT_NAME': scope.get('root_path', ''),
-            'PATH_INFO': scope['path'],
-            'QUERY_STRING': scope['query_string'].decode('latin-1'),
-            'SERVER_PROTOCOL': 'http/%s' % scope.get('http_version', '1.1'),
-            'wsgi.url_scheme': scope.get('scheme', 'http'),
-        }
-        if scope.get('client'):
-            environ['REMOTE_ADDR'] = scope['client'][0]
-            environ['REMOTE_PORT'] = str(scope['client'][1])
-        if scope.get('server'):
-            environ['SERVER_NAME'] = scope['server'][0]
-            environ['SERVER_PORT'] = str(scope['server'][1])
-        headers = dict(scope['headers'])
-        if b'content-type' in headers:
-            environ['CONTENT_TYPE'] = headers.pop(b'content-type')
-        if b'content-length' in headers:
-            environ['CONTENT_LENGTH'] = headers.pop(b'content-length')
-        for key, val in headers.items():
-            key_str = 'HTTP_%s' % key.decode('latin-1').replace('-', '_').upper()
-            val_str = val.decode('latin-1')
-            environ[key_str] = val_str
-
-        protocol = scope['type']
-        path = scope['path']
-
-        try:
-            consumer = self.protocol_router[protocol][path]
-        except KeyError:
-            consumer = None
-
-        if consumer is not None:
-            return consumer(scope)
-
-        wsgi_status = None
-        wsgi_headers = None
-
-        def start_response(status, headers, exc_info=None):
-            nonlocal wsgi_status, wsgi_headers
-            wsgi_status = status
-            wsgi_headers = headers
-
-        response = self.wsgi(environ, start_response)
-
-        status = int(wsgi_status.split()[0])
-        headers = [
-            [key.lower().encode('latin-1'), val.encode('latin-1')]
-            for key, val in wsgi_headers
-        ]
-        body = b''.join(response)
-        return HttpConsumer(scope, body=body, status=status, headers=headers)
-
-    def asgi(self, rule, *args, **kwargs):
-        try:
-            protocol = kwargs['protocol']
-        except KeyError:
-            raise Exception("You must defined a protocol type for an ASGI handler")
-
-        def _route(func):
-            self.protocol_router[protocol][rule] = func
-        return _route
-
-
-app = FlaskWsgiToAsgiAdapter(Flask(__name__))
-
-
-@app.route("/")
-def hello():
-    return render_template('hello.html')
-
-
-@app.asgi("/asgi", protocol="http")
-def hello_asgi(scope):
-    return HttpConsumer(scope, body="Hello ASGI!", status=200)
-
-
-@app.asgi("/ws", protocol="websocket")
-def hello_websocket(scope):
-    return WebSocketConsumer(scope)
+    return asgi_instance

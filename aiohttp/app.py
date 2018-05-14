@@ -3,38 +3,11 @@ from aiohttp.http import RawRequestMessage
 from yarl import URL
 
 
-class HttpConsumer:
+class AioHttpAsgiAdapter:
 
-    def __init__(self, scope, webapp=None, request=None):
-        self.scope = scope
-        self.webapp = webapp
-        self.request = request
-
-    async def __call__(self, receive, send):
-        response = await self.webapp._handle(self.request)
-        body = response.body
-        if not isinstance(body, bytes):
-            body = body.encode()
-        headers = [
-            (key.encode(), value.encode())
-            for key, value in response.headers.items()
-        ]
-        await send({
-            'type': 'http.response.start',
-            'status': response.status,
-            'headers': headers,
-        })
-        await send({
-            'type': 'http.response.body',
-            'body': response.body,
-            'more_body': False,
-        })
-
-
-class AioHttpToAsgiAdapter:
-
-    def __init__(self, webapp):
-        self.webapp = webapp
+    def __init__(self, app):
+        self.app = app
+        self.request = None
 
     def __call__(self, scope):
         aio_message = RawRequestMessage(
@@ -49,8 +22,27 @@ class AioHttpToAsgiAdapter:
             chunked=False,
             url=URL(scope['path'])
         )
-        request = self.webapp._make_request(aio_message, None, 'http', None, None)
-        return HttpConsumer(scope, webapp=self.webapp, request=request)
+        #self.request = 
+
+        async def asgi_instance(receive, send):
+            request = self.app._make_request(aio_message, None, 'http', None, None)
+            response = await self.app._handle(request)
+            body = response.body
+            if not isinstance(body, bytes):
+                body = body.encode()
+            headers = [(k.encode(), v.encode()) for k, v in response.headers.items()]
+            await send({
+                'type': 'http.response.start',
+                'status': response.status,
+                'headers': headers,
+            })
+            await send({
+                'type': 'http.response.body',
+                'body': body,
+                'more_body': False,
+            })
+
+        return asgi_instance
 
 
 async def handle(request):
@@ -63,7 +55,7 @@ webapp = web.Application()
 webapp.add_routes([web.get('/', handle),
                    web.get('/{name}', handle)])
 
-app = AioHttpToAsgiAdapter(webapp)
+app = AioHttpAsgiAdapter(webapp)
 
 # TODO: Websocket
 
