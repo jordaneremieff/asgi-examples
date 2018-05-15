@@ -26,17 +26,18 @@ body = b"""<!DOCTYPE html>
 app = Afiqah()
 
 
-@app.route('/')
+@app.route("/")
 def home(scope):
-    return HttpResponse(scope, body=body, headers=[[b'content-type', b'text/html']])
+    return HttpResponse(scope, body=body, headers=[[b"content-type", b"text/html"]])
 
 
-@app.route('/ws')
+@app.route("/ws")
 def home_ws(scope):
+
     async def asgi_instance(receive, send):
         message = await receive()
-        if message['type'] == 'websocket.connect':
-            await send({'type': 'websocket.accept'})
-            await send({'type': 'websocket.send', 'text': "Hello world."})
-            await send({'type': 'websocket.close', 'code': 1000})
+        if message["type"] == "websocket.connect":
+            await send({"type": "websocket.accept"})
+            await send({"type": "websocket.close", "text": "Hello world.", "code": 1000})
+
     return asgi_instance

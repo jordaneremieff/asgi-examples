@@ -3,3 +3,4 @@ django
 channels
 uvicorn
 flask
+aiohttp

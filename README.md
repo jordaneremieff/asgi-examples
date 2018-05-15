@@ -1,38 +1,41 @@
 # asgi-examples
 
-This repository exists to provide proof-of-concept implementations of the ASGI specification in an attempt to help encourage its adoption by the maintainers and developers of existing projects. The example adapters are not robust, complete solutions for integrating ASGI into existing Python frameworks - they are intended to be simple demonstrations based on my personal understanding of ASGI at this point.
+This repository exists to provide proof-of-concept implementations of the ASGI specification in an attempt to help encourage its adoption by the maintainers and developers of existing projects. The example adapters are not intended to be robust, complete solutions for integrating ASGI into existing Python frameworks - they are simple demonstrations. 
+
+The examples are currently a work in progress and will likely not be maintained. They are meant to help others understand and learn more about ASGI.
+
+
+**Current examples include the following frameworks**: 
+
+- Django [Channels]
+
+- [Flask]
+
+- [aiohttp]
+
+- [afiqah]
 
 Please open an issue if you would like to see a specific framework example.
+
 
 ## Running
 
 You will need to use either [uvicorn] or [daphne] to run the ASGI server. 
 
 ```shell
-$ uvicorn <file>:<appname>
+$ uvicorn apps._<framework>:app
 ```
 
 ```shell
-$ daphne <file>:<appname>
+$ daphne apps._<framework>:app
 ```
 
-## Examples
 
-### Django
+## todo
 
-A simple Django [Channels] websocket app.
-
-### Flask
-
-A [Flask] app and ASGI adapter providing http & websocket consumer support.
-
-### AioHttp
-
-An [aiohttp] app and ASGI adapter providing http consumer support. (todo: websocket)
-
-### Afiqah
-
-An example of a pure ASGI app using the [Afiqah] microframework.
+- More examples
+- Tests
+- Simplify running examples
 
 
 [Channels]: https://github.com/django/channels/

@@ -17,6 +17,8 @@ from yarl import URL
 
 from flask import Flask
 
+# from ._aiohttp import AioHttpAsgiAdapter
+
 
 class AioHttpAsgiAdapter:
 
