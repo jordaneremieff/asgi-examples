@@ -1,6 +1,8 @@
--e git://github.com/afiqah/afiqah.git#egg=afiqah
+-e git+https://github.com/afiqah/afiqah.git#egg=afiqah
+-e git+https://gitlab.com/pgjones/quart.git#egg=quart # ASGIServer not on PyPI
 django
 channels
 uvicorn
 flask
 aiohttp
+pyramid
