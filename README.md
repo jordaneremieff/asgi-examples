@@ -1,8 +1,6 @@
 # asgi-examples
 
-This repository exists to provide proof-of-concept implementations of the ASGI specification in an attempt to help encourage its adoption by the maintainers and developers of existing projects. The example adapters are not intended to be robust, complete solutions for integrating ASGI into existing Python frameworks - they are simple demonstrations. 
-
-The examples are currently a work in progress and will likely not be maintained. They are meant to help others understand and learn more about ASGI.
+This repository exists to provide proof-of-concept implementations of the ASGI specification in an attempt to help encourage its adoption by the maintainers and developers of existing projects. The example adapters are not intended to be robust, complete solutions for integrating ASGI into existing Python frameworks - they are simple demonstrations to help others learn more about ASGI.
 
 
 **Current examples include the following frameworks**: 
@@ -14,6 +12,9 @@ The examples are currently a work in progress and will likely not be maintained.
 - [aiohttp]
 
 - [afiqah]
+
+- [Pyramid]
+
 
 Please open an issue if you would like to see a specific framework example.
 
@@ -44,3 +45,4 @@ $ daphne apps._<framework>:app
 [daphne]: https://github.com/django/daphne/
 [Flask]: https://github.com/pallets/flask/
 [aiohttp]: https://github.com/aio-libs/aiohttp/
+[Pyramid]: https://github.com/Pylons/pyramid/
