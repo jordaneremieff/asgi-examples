@@ -1,7 +1,7 @@
 # https://github.com/almarklein/asgish
 
-from asgish import handler2asgi
+import asgish
 
-@handler2asgi
+@asgish.to_asgi
 async def app(request):
    return "<html>hello world</html>"
