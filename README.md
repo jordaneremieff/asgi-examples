@@ -60,8 +60,7 @@ Below are links to various ASGI-related projects and information.
 #### Discussions
 
 - [Gunicorn issue](https://github.com/benoitc/gunicorn/issues/1380)
-- [Aiohttp issue](https://github.com/aio-libs/aiohttp/issues/2902)
 - [Werkzeug issue](https://github.com/pallets/werkzeug/issues/1322)
 - [Pyramid issue](https://github.com/Pylons/pyramid/issues/2603)
 - [Vibora issue](https://github.com/vibora-io/vibora/issues/14)
-- [Sanic issue](https://github.com/huge-success/sanic/issues/761)
+- [Sanic issue](https://github.com/huge-success/sanic/pull/1265)
