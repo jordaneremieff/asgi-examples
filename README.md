@@ -1,58 +1,63 @@
 # asgi-examples
 
-This repository exists to provide proof-of-concept implementations of the ASGI specification in an attempt to help encourage its adoption by the maintainers and developers of existing projects. The example adapters are not intended to be robust, complete solutions for integrating ASGI into existing Python frameworks - they are simple demonstrations to help others learn more about ASGI.
+A collection of example apps using ASGI frameworks.
 
-Please open an issue or pull request if you would like to contribute to the examples. The issue tracker may also be used for any informal ASGI-related discussions or questions.
+Please open an issue or pull request if you would like to contribute to the examples or README. The issue tracker may also be used for any informal ASGI-related discussions or questions.
 
-**Current examples include the following frameworks**: 
+## Frameworks / Libraries / Middlewares
 
 - [Channels](https://github.com/django/channels/)
-
-- [Flask](https://github.com/pallets/flask/)
-
-- [Aiohttp](https://github.com/aio-libs/aiohttp/)
-
-- [Pyramid](https://github.com/Pylons/pyramid/)
-
+- [Starlette](https://github.com/encode/starlette/)
 - [Quart](https://gitlab.com/pgjones/quart/)
-
+- [Quart Trio](https://gitlab.com/pgjones/quart-trio/)
 - [Asgish](https://github.com/almarklein/asgish/)
+- [FastAPI](https://github.com/tiangolo/fastapi/)
+- [Responder](https://github.com/kennethreitz/responder/)
+- [Lemon](https://github.com/joway/lemon/)
+- [Nardis](https://github.com/yoongkang/nardis)
+- [Sentry ASGI](https://github.com/encode/sentry-asgi)
 
-## Running
-
-Running an ASGI application requires an ASGI server:
+## Servers
 
 - [Uvicorn](https://github.com/encode/uvicorn/)
 - [Hypercorn](https://gitlab.com/pgjones/hypercorn/)
 - [Daphne](https://github.com/django/daphne/)
 
+## Tools
+
+- [uvicorn-gunicorn-fastapi-docker](https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker)
+- [uvicorn-gunicorn-starlette-docker](https://github.com/tiangolo/uvicorn-gunicorn-starlette-docker)
+- [uvicorn-gunicorn-docker](https://github.com/tiangolo/uvicorn-gunicorn-docker)
+- [asgi-scope](https://github.com/simonw/asgi-scope)
+
+### Running the applications
+
+An ASGI server is required to run the examples. For example, to run an application using `uvicorn`, use the following command:
 
 ```shell
-$ <server> apps._<framework>:app
+$ uvicorn app:app
 ```
 
-## Reference
+### Reference
 
 Below are links to various ASGI-related projects and information. 
 
-### Specification
+#### Specification
 
 - [ASGI (Asynchronous Server Gateway Interface) docs](https://asgi.readthedocs.io/)
 - [asgiref](https://github.com/django/asgiref/)
 
-### Misc
-
-- [Pyramid cookbook recipe](https://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/deployment/asgi.html)
-
-### Blog posts
+#### Misc
 
 - [A Django Async Roadmap](https://www.aeracode.org/2018/06/04/django-async-roadmap/)
 - [Writing an ASGI Web Framework](https://yoongkang.com/blog/writing-an-asgi-web-framework/)
 - [Embracing ASGI with Quart; Introducing Hypercorn](https://medium.com/@pgjones/embracing-asgi-with-quart-introducing-hypercorn-652cb6b269f5)
 - [Quart; an ASGI alternative to Flask](https://medium.com/@pgjones/quart-an-asgi-alternative-to-flask-53915868d220)
 - [An Asyncio socket tutorial](https://medium.com/@pgjones/an-asyncio-socket-tutorial-5e6f3308b8b0)
+- [Pyramid cookbook recipe](https://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/deployment/asgi.html)
+- [Quart-Trio - A Trio based HTTP Framework](https://medium.com/@pgjones/quart-trio-9415d7c1928a)
 
-### Discussions
+#### Discussions
 
 - [Gunicorn issue](https://github.com/benoitc/gunicorn/issues/1380)
 - [Aiohttp issue](https://github.com/aio-libs/aiohttp/issues/2902)
