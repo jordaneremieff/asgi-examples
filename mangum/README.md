@@ -1,6 +1,6 @@
 # Mangum
 
-Mangum is a library that provides adapters and tools for ASGI applications used on FaaS platforms.
+[Mangum](https://github.com/erm/mangum) is a library that provides adapters and tools for ASGI applications used on FaaS platforms.
 
 ## Requirements
 
