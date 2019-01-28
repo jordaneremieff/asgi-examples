@@ -1,4 +1,4 @@
-# mangum
+# Mangum
 
 Mangum is a library that provides adapters and tools for ASGI applications used on FaaS platforms.
 
@@ -11,9 +11,9 @@ Mangum is a library that provides adapters and tools for ASGI applications used 
 
 Mangum adapters are intended to work with any ASGI application and any ASGI framework.
 
-**Note**: One caveat to the ASGI adapter working universally is any platform-specific conflicts that need to be considered in a particular application, e.g. read-only filesystems.
+**Note**: One caveat to the ASGI adapters being universal would be any platform-specific conflicts that need to be considered for a particular application, e.g. read-only filesystems.
 
-* Edit `asgi.py` and uncomment and application try.
+* Edit `asgi.py` and uncomment and application to try.
 
 * Edit `requirements.txt` to include any dependencies, ie: if you are using a framework.
 
