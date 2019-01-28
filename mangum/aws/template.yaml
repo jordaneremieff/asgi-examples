@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    An example ASGI AWS deployment.
+    ASGI application
+Globals:
+    Function:
+        Timeout: 300
+Resources:
+    ASGIFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            FunctionName: ASGIFunction
+            CodeUri: ./build
+            Handler: asgi.handler
+            Runtime: python3.7
+            # Environment:
+            #     Variables:
+            #         PARAM1: VALUE
+            Events:
+                ASGIEvent:
+                    Type: Api
+                    Properties:
+                        Path: /
+                        Method: get
+Outputs:
+    ASGIApi:
+      Description: "API Gateway endpoint URL for ASGI function"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/"
+    ASGIFunction:
+      Description: "ASGI Lambda Function ARN"
+      Value: !GetAtt ASGIFunction.Arn
+    ASGIFunctionIamRole:
+      Description: "Implicit IAM Role created for ASGI function"
+      Value: !GetAtt ASGIFunctionRole.Arn
