@@ -1,4 +1,4 @@
-from mangum.platforms.aws.adapter import AWSLambdaAdapter
+from mangum import Mangum
 
 # Uncomment an example to use with the adapter
 
@@ -39,4 +39,4 @@ from mangum.platforms.aws.adapter import AWSLambdaAdapter
 #     return "hello world!"
 
 
-handler = AWSLambdaAdapter(app)
+handler = Mangum(app)

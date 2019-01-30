@@ -1,4 +1,0 @@
-mangum>=0.6.2
-# bocadillo
-# starlette
-quart
