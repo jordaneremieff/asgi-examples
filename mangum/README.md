@@ -4,7 +4,7 @@ Mangum is a library that provides an ASGI adapter for use with AWS Lambda & API 
 
 ## Testing the examples
 
-Below is just one potential way to deploy the application, it uses a [SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html) template.
+Below is just one potential way to deploy the application, it uses a [SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html) template and is very basic.
 
 ## Requirements
 
@@ -25,6 +25,12 @@ The `Mangum` adapter is intended to "just work" with any ASGI application and an
 
 ```shell
 $ pip3 install -r requirements.txt -t ./build
+```
+
+* Include the `asgi.py` in the `build` folder
+
+```shell
+$ cp asgi.py build/
 ```
 
 * Create an S3 bucket for your application
