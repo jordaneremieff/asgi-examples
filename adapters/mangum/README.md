@@ -43,12 +43,9 @@ By default, this command writes built artifacts to `.aws-sam/build` folder.
 sam local start-api
 ```
 
-If the previous command ran successfully you should now be able to hit the following local endpoints to invoke your function:
+If the previous command ran successfully you should now be able to hit the following local endpoint to invoke your function:
 
-`http://127.0.0.1:3000/asgi/quart/hello`
-`http://127.0.0.1:3000/asgi/bocadillo/hello`
-`http://127.0.0.1:3000/asgi/starlette/hello`
-`http://127.0.0.1:3000/asgi/fastapi/hello`
+`http://127.0.0.1:3000`
 
 
 ## Packaging & deployment
