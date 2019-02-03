@@ -6,6 +6,8 @@
 
 Here are two examples of writing an ASGI application in its simplest form.
 
+### As a function
+
 ```python
 
 def app(scope):
@@ -21,6 +23,8 @@ def app(scope):
 
     return asgi
 ```
+
+### As a class
 
 ```python
 class App:
