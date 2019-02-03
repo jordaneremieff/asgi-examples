@@ -1,10 +1,47 @@
 # asgi-examples
 
-[ASGI (Asynchronous Server Gateway Interface) docs](https://asgi.readthedocs.io/) example applications and general information.
+[ASGI (Asynchronous Server Gateway Interface)](https://asgi.readthedocs.io/) examples and information.
 
-Please open an issue or pull request if you would like to contribute to the examples or README. The issue tracker may also be used for any informal ASGI-related discussions or questions.
+## ASGI application example
+
+Here are two examples of writing an ASGI application in its simplest form.
+
+```python
+
+def app(scope):
+    async def asgi(receive, send):
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 200,
+                "headers": [[b"content-type", b"text/plain"]],
+            }
+        )
+        await send({"type": "http.response.body", "body": b"Hello, world!"})
+
+    return asgi
+```
+
+```python
+class App:
+    def __init__(self, scope):
+        self.scope = scope
+
+    async def __call__(self, receive, send):
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 200,
+                "headers": [[b"content-type", b"text/plain"]],
+            }
+        )
+        await send({"type": "http.response.body", "body": b"Hello, world!"})
+```
+
 
 ## Frameworks / Adapters / Middlewares
+
+Below are various frameworks, adapters, and middlewares that use ASGI.
 
 - [Channels](https://github.com/django/channels/)
 - [Starlette](https://github.com/encode/starlette/)
@@ -70,3 +107,7 @@ Below are links to various ASGI-related projects and information.
 - [Pyramid issue](https://github.com/Pylons/pyramid/issues/2603)
 - [Vibora issue](https://github.com/vibora-io/vibora/issues/14)
 - [Sanic issue](https://github.com/huge-success/sanic/pull/1265)
+
+## Contributing
+
+Please open an issue or pull request if you would like to contribute to the examples or README. The issue tracker may also be used for any informal ASGI-related discussions or questions.
