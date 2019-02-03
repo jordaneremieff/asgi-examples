@@ -2,7 +2,7 @@
 
 [Mangum](https://github.com/erm/mangum) is a library that provides an ASGI adapter for use with AWS Lambda & API Gateway.
 
-The `Mangum` adapter class is intended to "just work" with any ASGI application or framework, but non-ASGI-specific behaviour that conflicts with the environment may need to be addressed specifically depending on the particular application.
+The adapter class is intended to "just work" with any ASGI application or framework, but non-ASGI-specific behaviour that conflicts with the environment may need to be addressed specifically depending on the particular application.
 
 In this example, we will use the [SAM CLI](https://aws.amazon.com/serverless/sam/) for testing and deployment, but you may use alternative packaging and deployment methods.
 
