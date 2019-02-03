@@ -1,8 +1,7 @@
 from mangum import Mangum
 
 # import bocadillo
-from fastapi import FastAPI
-
+# from fastapi import FastAPI
 # from starlette.applications import Starlette
 # from starlette.responses import PlainTextResponse
 # from quart import Quart
@@ -11,27 +10,27 @@ from fastapi import FastAPI
 # -- Raw ASGI example -- #
 
 
-# def app(scope):
-#     async def asgi(receive, send):
-#         await send(
-#             {
-#                 "type": "http.response.start",
-#                 "status": 200,
-#                 "headers": [[b"content-type", b"text/plain"]],
-#             }
-#         )
-#         await send({"type": "http.response.body", "body": b"Hello, world!"})
+def app(scope):
+    async def asgi(receive, send):
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 200,
+                "headers": [[b"content-type", b"text/plain"]],
+            }
+        )
+        await send({"type": "http.response.body", "body": b"Hello, world!"})
 
-#     return asgi
+    return asgi
 
 
 # -- FastAPI -- #
-app = FastAPI()
+# app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+# @app.get("/")
+# def read_root():
+#     return {"Hello": "World"}
 
 
 # -- Bocadillo -- #

@@ -1,5 +1,5 @@
 mangum
 # bocadillo
-fastapi
+# fastapi
 # quart
 # starlette
