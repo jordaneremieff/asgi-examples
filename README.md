@@ -1,10 +1,10 @@
 # asgi-examples
 
-A collection of example apps using ASGI frameworks.
+[ASGI (Asynchronous Server Gateway Interface) docs](https://asgi.readthedocs.io/) example applications and general information.
 
 Please open an issue or pull request if you would like to contribute to the examples or README. The issue tracker may also be used for any informal ASGI-related discussions or questions.
 
-## Frameworks / Libraries / Middlewares
+## Frameworks / Adapters / Middlewares
 
 - [Channels](https://github.com/django/channels/)
 - [Starlette](https://github.com/encode/starlette/)
@@ -18,6 +18,7 @@ Please open an issue or pull request if you would like to contribute to the exam
 - [Bocadillo](https://github.com/bocadilloproject/bocadillo)
 - [Sentry ASGI](https://github.com/encode/sentry-asgi)
 - [Mangum](https://github.com/erm/mangum)
+- [Bonnette](https://github.com/erm/bonnette)
 
 ## Servers
 
@@ -58,6 +59,9 @@ Below are links to various ASGI-related projects and information.
 - [An Asyncio socket tutorial](https://medium.com/@pgjones/an-asyncio-socket-tutorial-5e6f3308b8b0)
 - [Pyramid cookbook recipe](https://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/deployment/asgi.html)
 - [Quart-Trio - A Trio based HTTP Framework](https://medium.com/@pgjones/quart-trio-9415d7c1928a)
+- [Hello, ASGI - Introduction to the emerging ASGI standard](https://www.encode.io/articles/hello-asgi/)
+- [Working with ASGI and HTTP](https://www.encode.io/articles/asgi-http/)
+- [Working with HTTP requests in ASGI](https://www.encode.io/articles/working-with-http-requests-in-asgi/)
 
 #### Discussions
 

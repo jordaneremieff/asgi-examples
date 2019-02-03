@@ -11,14 +11,14 @@ Resources:
         Type: AWS::Serverless::Function
         Properties:
             FunctionName: ASGIFunction
-            CodeUri: ./build
+            CodeUri: ./app
             Handler: asgi.handler
             Runtime: python3.7
             # Environment:
             #     Variables:
             #         PARAM1: VALUE
             Events:
-                ASGIEvent:
+                CatchAll:
                     Type: Api
                     Properties:
                         Path: /
@@ -26,7 +26,7 @@ Resources:
 Outputs:
     ASGIApi:
       Description: "API Gateway endpoint URL for ASGI function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/asgi/"
     ASGIFunction:
       Description: "ASGI Lambda Function ARN"
       Value: !GetAtt ASGIFunction.Arn
