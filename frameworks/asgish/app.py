@@ -1,6 +1,6 @@
-import asgish
+import asgineer
 
 
-@asgish.to_asgi
+@asgineer.to_asgi
 async def app(request):
     return "<html>hello world</html>"
